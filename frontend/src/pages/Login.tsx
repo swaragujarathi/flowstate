@@ -50,7 +50,7 @@ export default function Login() {
         </h1>
 
         <p className="mb-8 text-slate-400">
-          Sign in to your Panic Planner
+          Sign in to your FlowState
         </p>
 
         <form

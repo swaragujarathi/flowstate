@@ -120,7 +120,7 @@ export default function Register() {
             mb-8
           "
         >
-          Join Panic Planner
+          Join FlowState
         </p>
 
         {error && (

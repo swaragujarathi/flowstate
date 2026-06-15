@@ -99,7 +99,7 @@ export default function Schedule() {
             </h3>
 
             <p className="mt-2 text-slate-400">
-            Create some tasks and Panic Planner
+            Create some tasks and FlowState
             will automatically build your study
             schedule.
             </p>

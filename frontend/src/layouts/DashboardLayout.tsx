@@ -18,7 +18,7 @@ export default function DashboardLayout({
 
       <div className="md:hidden flex items-center justify-between p-4 border-b border-white/10">
         <h1 className="text-xl font-bold text-purple-400">
-          Panic Planner
+          FlowState
         </h1>
 
         <button
