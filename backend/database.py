@@ -9,6 +9,7 @@ from sqlalchemy.pool import NullPool
 load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
+api_key = os.getenv("GEMINI_API_KEY")
 
 # 2. Create the SQLAlchemy Engine 
 # This handles the low-level connection pool to your Postgres database

@@ -9,6 +9,7 @@ import {
   deleteTask,
   updateTask
 } from "../api/tasks";
+import api from "../api/axios";
 
 interface Task {
   id: number;
@@ -24,6 +25,10 @@ interface Task {
 export default function Tasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
+  const [generatedTasks, setGeneratedTasks] =
+    useState<any[]>([]);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] =
@@ -162,6 +167,79 @@ export default function Tasks() {
     }
   };
 
+  const handleGenerateAI = async () => {
+      if (!aiPrompt.trim()) {
+          toast.error("Enter your study plan.");
+          return;
+      }
+
+      setAiLoading(true);
+
+      try {
+
+          const res = await api.post(
+              "/ai/parse",
+              {
+                  text: aiPrompt
+              }
+          );
+
+          setGeneratedTasks(res.data.tasks);
+
+          toast.success("Tasks generated!");
+
+      } catch (err) {
+
+          console.error(err);
+
+          toast.error("Failed to generate tasks.");
+
+      } finally {
+
+          setAiLoading(false);
+
+      }
+  };
+
+  const handleSaveGeneratedTasks = async () => {
+    try {
+      for (const task of generatedTasks) {
+        await createTask({
+          title: task.title,
+          description: "",
+          priority: task.priority,
+          estimated_hours: task.estimated_hours,
+          deadline: task.deadline,
+        });
+      }
+
+      toast.success("Tasks added successfully!");
+
+      setGeneratedTasks([]);
+      setAiPrompt("");
+
+      fetchTasks();
+
+    } catch (error) {
+      toast.error("Failed to save tasks.");
+    }
+  };
+
+  const updateGeneratedTask = (
+    index: number,
+    field: keyof AITask,
+    value: AITask[keyof AITask]
+  ) => {
+    const updated = [...generatedTasks];
+
+    updated[index] = {
+      ...updated[index],
+      [field]: value,
+    };
+
+    setGeneratedTasks(updated);
+  };
+
   return (
     <DashboardLayout>
 
@@ -266,6 +344,172 @@ export default function Tasks() {
         </form>
 
       </GlassCard>
+
+      <GlassCard className="mb-8 p-6">
+
+        <h2 className="mb-2 text-xl font-semibold">
+          ✨ Generate Tasks with AI
+        </h2>
+
+        <p className="mb-4 text-slate-400">
+          Describe your study plan and let AI create tasks for you.
+        </p>
+
+        <textarea
+          rows={5}
+          value={aiPrompt}
+          onChange={(e) => setAiPrompt(e.target.value)}
+          placeholder={
+          `Example:
+          I have my DSA exam on July 20.
+          Finish Graphs in 10 hours.
+          Finish Dynamic Programming in 15 hours.
+          Revise SQL in 5 hours.`}
+          className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3"
+        />
+
+        <button
+          onClick={handleGenerateAI}
+          disabled={aiLoading}
+          className="mt-4 rounded-xl bg-purple-600 px-6 py-3 font-semibold hover:bg-purple-500 disabled:opacity-50"
+        >
+          {aiLoading ? "Generating..." : "Generate Tasks"}
+        </button>
+
+      </GlassCard>
+
+      {
+        generatedTasks.length > 0 && (
+
+        <GlassCard className="mb-8 p-6">
+
+        <h2 className="mb-4 text-xl font-semibold">
+        Generated Tasks
+        </h2>
+
+        <div className="space-y-4">
+
+        {generatedTasks.map((task, index) => (
+
+            <div
+              key={index}
+              className="rounded-xl border border-white/10 bg-white/5 p-5 space-y-4"
+            >
+
+              <div>
+                <label className="mb-1 block text-sm text-slate-400">
+                  Title
+                </label>
+
+                <input
+                  type="text"
+                  value={task.title}
+                  onChange={(e) =>
+                    updateGeneratedTask(index, "title", e.target.value)
+                  }
+                  className="w-full rounded-xl border border-white/10 bg-slate-800 px-4 py-2"
+                />
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm text-slate-400">
+                  Estimated Hours
+                </label>
+
+                <input
+                  type="number"
+                  min="1"
+                  value={task.estimated_hours}
+                  onChange={(e) =>
+                    updateGeneratedTask(
+                      index,
+                      "estimated_hours",
+                      Number(e.target.value)
+                    )
+                  }
+                  className="w-full rounded-xl border border-white/10 bg-slate-800 px-4 py-2"
+                />
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm text-slate-400">
+                  Priority
+                </label>
+
+                <select
+                  value={task.priority}
+                  onChange={(e) =>
+                    updateGeneratedTask(index, "priority", e.target.value)
+                  }
+                  className="w-full rounded-xl border border-white/10 bg-slate-800 px-4 py-2"
+                >
+                  <option>High</option>
+                  <option>Medium</option>
+                  <option>Low</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm text-slate-400">
+                  Difficulty
+                </label>
+
+                <select
+                  value={task.difficulty}
+                  onChange={(e) =>
+                    updateGeneratedTask(index, "difficulty", e.target.value)
+                  }
+                  className="w-full rounded-xl border border-white/10 bg-slate-800 px-4 py-2"
+                >
+                  <option>Easy</option>
+                  <option>Medium</option>
+                  <option>Hard</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm text-slate-400">
+                  Deadline
+                </label>
+
+                <input
+                  type="date"
+                  value={task.deadline ?? ""}
+                  onChange={(e) =>
+                    updateGeneratedTask(index, "deadline", e.target.value)
+                  }
+                  className="w-full rounded-xl border border-white/10 bg-slate-800 px-4 py-2"
+                />
+              </div>
+
+              <button
+                onClick={() => {
+                  setGeneratedTasks(
+                    generatedTasks.filter((_, i) => i !== index)
+                  );
+                }}
+                className="rounded-lg bg-red-500/20 px-4 py-2 text-red-400 hover:bg-red-500/30"
+              >
+                Remove Task
+              </button>
+
+            </div>
+
+          ))}
+
+        </div>
+
+        <button
+          onClick={handleSaveGeneratedTasks}
+          className="mt-6 rounded-xl bg-green-600 px-6 py-3 font-semibold hover:bg-green-500"
+        >
+          Save All
+        </button>
+
+        </GlassCard>
+
+        )
+      }
 
       <div className="space-y-4">
 

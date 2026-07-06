@@ -6,7 +6,7 @@ from routes.schedule import router as schedule_router
 from routes.sessions import router as session_router
 from routes.analytics import router as analytics_router
 from routes.users import router as user_router
-
+from routes.ai import router as ai_router
 from database import engine, Base
 
 Base.metadata.create_all(bind=engine)
@@ -29,6 +29,7 @@ app.include_router(schedule_router)
 app.include_router(session_router)
 app.include_router(analytics_router)
 app.include_router(user_router)
+app.include_router(ai_router)
 
 @app.get("/")
 def root():

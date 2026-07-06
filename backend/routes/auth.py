@@ -57,6 +57,19 @@ def login(
         .first()
     )
 
+    print("EMAIL:", user.email)
+    print("FOUND USER:", db_user)
+
+    if db_user:
+        print("HASH:", db_user.hashed_password)
+        print(
+            "PASSWORD VALID:",
+            verify_password(
+                user.password,
+                db_user.hashed_password
+            )
+        )
+
     if not db_user:
         raise HTTPException(
             status_code=401,
