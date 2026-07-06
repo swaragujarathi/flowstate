@@ -22,6 +22,14 @@ interface Task {
   deadline: string;
 }
 
+interface AITask {
+  title: string;
+  estimated_hours: number;
+  priority: string;
+  difficulty: string;
+  deadline: string | null;
+}
+
 export default function Tasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
