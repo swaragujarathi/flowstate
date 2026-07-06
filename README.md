@@ -4,13 +4,13 @@ FlowState is an AI-powered study planner that helps students organize their stud
 
 # Key Features
 
-✔ AI-powered task generation
-✔ Dynamic timetable generation
-✔ Deadline-aware and priority based scheduling
-✔ Progress tracking
-✔ Productivity analytics and study streak tracking
-✔ JWT Authentication
-✔ Responsive modern UI
+* AI-powered task generation
+* Dynamic timetable generation
+* Deadline-aware and priority based scheduling
+* Progress and study streak tracking
+* Productivity analytics 
+* JWT Authentication
+* Responsive modern UI
 
 ## Tech Stack
 
