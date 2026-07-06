@@ -1,15 +1,16 @@
-# FlowState
+# FlowState – AI-Powered Study Planner
 
-FlowState is a smart study planner that creates personalized schedules and dynamically adapts them as users complete tasks, miss sessions, or add new work.
+FlowState is an AI-powered study planner that helps students organize their studies more effectively. It creates personalized study schedules, dynamically adapts them as progress changes, and uses Google's Gemini AI to convert natural language study plans into structured tasks.
 
-## Features
+# Key Features
 
-* Secure user authentication (JWT + bcrypt)
-* Task creation and management
-* Smart daily study schedule generation
-* Deadline-based prioritization
-* Productivity analytics and study streak tracking
-* Interactive dashboard with charts
+✔ AI-powered task generation
+✔ Dynamic timetable generation
+✔ Deadline-aware and priority based scheduling
+✔ Progress tracking
+✔ Productivity analytics and study streak tracking
+✔ JWT Authentication
+✔ Responsive modern UI
 
 ## Tech Stack
 
@@ -27,6 +28,7 @@ FlowState is a smart study planner that creates personalized schedules and dynam
 * SQLAlchemy
 * PostgreSQL
 * JWT Authentication
+* Google Gemini API
 
 **Deployment**
 
@@ -50,11 +52,13 @@ npm run dev
 
 ## What I Learned
 
-* Full-stack application development
-* REST API design
-* Authentication and authorization
-* Database design with SQLAlchemy
-* Cloud deployment and debugging
+- Building full-stack applications with React and FastAPI
+- REST API design and backend architecture
+- PostgreSQL database design with SQLAlchemy
+- JWT-based authentication and authorization
+- Prompt engineering and LLM integration using Google Gemini
+- Parsing unstructured text into structured data
+- Deploying production applications using Vercel, Render and Neon PostgreSQL
 
 ## Live Demo
 
